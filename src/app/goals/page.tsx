@@ -175,13 +175,18 @@ export default function GoalsPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow mb-6">
-          <div className="px-6 py-4 border-b border-gray-200">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 mb-8">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-2xl">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+              <div className="flex items-center space-x-2">
+                <Filter className="h-5 w-5 text-blue-600" />
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Filters & Search
+                </h2>
+              </div>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
+                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
               >
                 <Filter className="mr-2 h-4 w-4" />
                 {showFilters ? "Hide" : "Show"} Filters
@@ -191,26 +196,29 @@ export default function GoalsPage() {
 
           {showFilters && (
             <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Search
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    <Search className="inline mr-1 h-4 w-4" />
+                    Search Goals
                   </label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <input
                       type="text"
-                      placeholder="Search goals..."
+                      placeholder="Search by title or description..."
                       value={filters.search}
                       onChange={(e) =>
                         setFilters({ ...filters, search: e.target.value })
                       }
-                      className="pl-10 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="pl-10 w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    <Target className="inline mr-1 h-4 w-4" />
                     Status
                   </label>
                   <select
@@ -218,18 +226,26 @@ export default function GoalsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, status: e.target.value })
                     }
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   >
-                    <option value="">All Statuses</option>
+                    <option value="" className="text-gray-900">
+                      All Statuses
+                    </option>
                     {Object.entries(goalStatusLabels).map(([value, label]) => (
-                      <option key={value} value={value}>
+                      <option
+                        key={value}
+                        value={value}
+                        className="text-gray-900"
+                      >
                         {label}
                       </option>
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    <AlertCircle className="inline mr-1 h-4 w-4" />
                     Priority
                   </label>
                   <select
@@ -237,17 +253,87 @@ export default function GoalsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, priority: e.target.value })
                     }
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   >
-                    <option value="">All Priorities</option>
+                    <option value="" className="text-gray-900">
+                      All Priorities
+                    </option>
                     {Object.entries(priorityLabels).map(([value, label]) => (
-                      <option key={value} value={value}>
+                      <option
+                        key={value}
+                        value={value}
+                        className="text-gray-900"
+                      >
                         {label}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
+
+              {/* Active Filters Display */}
+              {(filters.search || filters.status || filters.priority) && (
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-gray-700">
+                      Active filters:
+                    </span>
+                    {filters.search && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        Search: "{filters.search}"
+                        <button
+                          onClick={() => setFilters({ ...filters, search: "" })}
+                          className="ml-1 text-blue-600 hover:text-blue-800"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )}
+                    {filters.status && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Status:{" "}
+                        {
+                          goalStatusLabels[
+                            filters.status as keyof typeof goalStatusLabels
+                          ]
+                        }
+                        <button
+                          onClick={() => setFilters({ ...filters, status: "" })}
+                          className="ml-1 text-green-600 hover:text-green-800"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )}
+                    {filters.priority && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                        Priority:{" "}
+                        {
+                          priorityLabels[
+                            filters.priority as keyof typeof priorityLabels
+                          ]
+                        }
+                        <button
+                          onClick={() =>
+                            setFilters({ ...filters, priority: "" })
+                          }
+                          className="ml-1 text-orange-600 hover:text-orange-800"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )}
+                    <button
+                      onClick={() =>
+                        setFilters({ search: "", status: "", priority: "" })
+                      }
+                      className="text-sm text-gray-500 hover:text-gray-700 underline"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -332,13 +418,28 @@ export default function GoalsPage() {
                           e.target.value as GoalStatus
                         )
                       }
-                      className={`text-xs font-medium rounded-full px-2.5 py-0.5 border-0 ${
+                      className={`text-xs font-medium rounded-full px-3 py-1.5 border-2 cursor-pointer transition-all duration-200 hover:shadow-sm ${
                         goalStatusColors[goal.status]
                       }`}
+                      style={{
+                        backgroundColor: "white",
+                        color:
+                          goal.status === "COMPLETED"
+                            ? "#065f46"
+                            : goal.status === "IN_PROGRESS"
+                            ? "#1e40af"
+                            : goal.status === "CANCELLED"
+                            ? "#dc2626"
+                            : "#374151",
+                      }}
                     >
                       {Object.entries(goalStatusLabels).map(
                         ([value, label]) => (
-                          <option key={value} value={value}>
+                          <option
+                            key={value}
+                            value={value}
+                            className="text-gray-900 bg-white"
+                          >
                             {label}
                           </option>
                         )
@@ -347,7 +448,7 @@ export default function GoalsPage() {
 
                     <Link
                       href={`/goals/${goal.id}`}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                     >
                       View Details
                     </Link>

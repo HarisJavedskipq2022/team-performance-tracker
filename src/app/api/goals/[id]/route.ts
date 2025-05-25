@@ -4,11 +4,12 @@ import { GoalStatus, Priority } from "@prisma/client";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const goal = await prisma.goal.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: {
           select: {
@@ -37,9 +38,10 @@ export async function GET(
 // PUT /api/goals/[id] - Update goal
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { title, description, status, priority, dueDate } = body;
 
@@ -52,7 +54,7 @@ export async function PUT(
       updateData.dueDate = dueDate ? new Date(dueDate) : null;
 
     const goal = await prisma.goal.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         user: {
@@ -78,11 +80,12 @@ export async function PUT(
 // DELETE /api/goals/[id] - Delete goal
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.goal.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Goal deleted successfully" });
