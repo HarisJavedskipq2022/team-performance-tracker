@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      Role     @default(EMPLOYEE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  goals           Goal[]
+  givenFeedback   Feedback[] @relation("FeedbackGiver")
+  receivedFeedback Feedback[] @relation("FeedbackReceiver")
+  reviews         Review[]
+  skills          UserSkill[]
+
+  @@map("users")
+}
+
+model Goal {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      GoalStatus @default(NOT_STARTED)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("goals")
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  content   String
+  type      FeedbackType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  giverId    String
+  receiverId String
+  giver      User @relation("FeedbackGiver", fields: [giverId], references: [id], onDelete: Cascade)
+  receiver   User @relation("FeedbackReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@map("feedback")
+}
+
+model Review {
+  id          String     @id @default(cuid())
+  title       String
+  content     String
+  rating      Int        // 1-5 scale
+  reviewType  ReviewType
+  period      String     // e.g., "Q1 2024"
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Skill {
+  id          String @id @default(cuid())
+  name        String @unique
+  category    String
+  description String?
+
+  // Relationships
+  userSkills UserSkill[]
+
+  @@map("skills")
+}
+
+model UserSkill {
+  id           String @id @default(cuid())
+  level        Int    // 1-5 scale
+  lastAssessed DateTime @default(now())
+
+  // Relationships
+  userId  String
+  skillId String
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill   Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+  @@map("user_skills")
+}
+
+// Enums
+enum Role {
+  EMPLOYEE
+  MANAGER
+  HR_MANAGER
+  ADMIN
+}
+
+enum GoalStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FeedbackType {
+  POSITIVE
+  CONSTRUCTIVE
+  GENERAL
+}
+
+enum ReviewType {
+  QUARTERLY
+  ANNUAL
+  PROJECT_BASED
+  PEER_REVIEW
+} 
