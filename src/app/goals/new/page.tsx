@@ -7,6 +7,7 @@ import GoalPriority from "@/components/goals/GoalPriority";
 import GoalTimeline from "@/components/goals/GoalTimeline";
 import GoalPreview from "@/components/goals/GoalPreview";
 import GoalTipsCard from "@/components/goals/GoalTipsCard";
+import { useToast } from "@/contexts/ToastContext";
 import { Priority } from "@prisma/client";
 import { AlertCircle, ArrowLeft, Save, Target } from "lucide-react";
 import Link from "next/link";
@@ -22,6 +23,7 @@ type UserOption = {
 
 export default function NewGoalPage() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [users, setUsers] = useState<UserOption[]>([]);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -93,13 +95,22 @@ export default function NewGoalPage() {
       });
 
       if (response.ok) {
+        const createdGoal = await response.json();
+        showSuccess(
+          "Goal Created Successfully!",
+          `"${formData.title}" has been assigned to the team member.`
+        );
         router.push("/goals");
       } else {
         const error = await response.json();
-        setErrors({ submit: error.error || "Failed to create goal" });
+        const errorMessage = error.error || "Failed to create goal";
+        setErrors({ submit: errorMessage });
+        showError("Failed to Create Goal", errorMessage);
       }
     } catch (error) {
-      setErrors({ submit: "Failed to create goal. Please try again." });
+      const errorMessage = "Failed to create goal. Please try again.";
+      setErrors({ submit: errorMessage });
+      showError("Network Error", errorMessage);
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import GoalCard from "@/components/goals/GoalCard";
 import GoalFilters from "@/components/goals/GoalFilters";
 import GoalStats from "@/components/goals/GoalStats";
 import EmptyGoalsState from "@/components/goals/EmptyGoalsState";
+import { useToast } from "@/contexts/ToastContext";
 import { GoalWithUser, isOverdue } from "@/lib/types";
 import { GoalStatus } from "@prisma/client";
 import { Plus } from "lucide-react";
@@ -12,6 +13,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function GoalsPage() {
+  const { showSuccess, showError } = useToast();
   const [goals, setGoals] = useState<GoalWithUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -53,10 +55,29 @@ export default function GoalsPage() {
       });
 
       if (response.ok) {
+        const updatedGoal = await response.json();
         fetchGoals();
+
+        const statusMessages = {
+          COMPLETED: "Goal marked as completed! 🎉",
+          IN_PROGRESS: "Goal status updated to in progress",
+          NOT_STARTED: "Goal status updated to not started",
+          CANCELLED: "Goal has been cancelled",
+        };
+
+        showSuccess(
+          "Status Updated",
+          statusMessages[newStatus] || "Goal status updated successfully"
+        );
+      } else {
+        throw new Error("Failed to update goal status");
       }
     } catch (error) {
       console.error("Error updating goal status:", error);
+      showError(
+        "Update Failed",
+        "Failed to update goal status. Please try again."
+      );
     }
   };
 

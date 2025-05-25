@@ -19,7 +19,7 @@ This document outlines the key product decisions, architectural choices, and tra
 - **API**: Next.js API Routes (serverless functions)
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: Prepared for NextAuth.js (not implemented in MVP)
-- **Deployment**: Docker-ready with docker-compose for local development
+- **Deployment**: Docker-ready with docker-compose for local development, initial deployment on Vercel and we can use neon for postgres deployment in production
 
 **Rationale**: Next.js API routes eliminate the need for a separate backend server, reducing complexity. PostgreSQL provides robust relational data handling. Prisma offers type-safe database operations and excellent developer experience.
 
