@@ -210,13 +210,12 @@ async function main() {
 
   console.log(`✅ Created ${skills.length} skills`);
 
-  // Create user skills
   const userSkills = await Promise.all([
     prisma.userSkill.upsert({
       where: {
         userId_skillId: {
           userId: users[0].id,
-          skillId: skills[0].id, // John - React
+          skillId: skills[0].id,
         },
       },
       update: {},
@@ -230,7 +229,7 @@ async function main() {
       where: {
         userId_skillId: {
           userId: users[0].id,
-          skillId: skills[1].id, // John - TypeScript
+          skillId: skills[1].id,
         },
       },
       update: {},
@@ -244,7 +243,7 @@ async function main() {
       where: {
         userId_skillId: {
           userId: users[2].id,
-          skillId: skills[4].id, // Mike - Leadership
+          skillId: skills[4].id,
         },
       },
       update: {},
@@ -258,7 +257,7 @@ async function main() {
       where: {
         userId_skillId: {
           userId: users[5].id,
-          skillId: skills[3].id, // Lisa - Database Design
+          skillId: skills[3].id,
         },
       },
       update: {},
