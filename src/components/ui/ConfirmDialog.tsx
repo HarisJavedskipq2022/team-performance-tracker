@@ -1,4 +1,4 @@
-import { AlertTriangle, X } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { ReactNode } from "react";
 
 interface ConfirmDialogProps {

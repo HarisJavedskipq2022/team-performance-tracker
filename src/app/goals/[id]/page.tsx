@@ -11,7 +11,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { GoalWithUser } from "@/lib/types";
 import { GoalStatus, Priority } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export default function GoalDetailsPage({
   params,
@@ -44,13 +44,7 @@ export default function GoalDetailsPage({
     initializeParams();
   }, [params]);
 
-  useEffect(() => {
-    if (goalId) {
-      fetchGoal();
-    }
-  }, [goalId]);
-
-  const fetchGoal = async () => {
+  const fetchGoal = useCallback(async () => {
     try {
       const response = await fetch(`/api/goals/${goalId}`);
       if (response.ok) {
@@ -73,7 +67,13 @@ export default function GoalDetailsPage({
     } finally {
       setLoading(false);
     }
-  };
+  }, [goalId, router]);
+
+  useEffect(() => {
+    if (goalId) {
+      fetchGoal();
+    }
+  }, [goalId, fetchGoal]);
 
   const handleEdit = () => {
     setEditing(true);
@@ -145,12 +145,12 @@ export default function GoalDetailsPage({
           `"${updatedGoal.title}" has been updated with the latest changes.`
         );
       } else {
-        const error = await response.json();
-        const errorMessage = error.error || "Failed to update goal";
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.error || "Failed to update goal";
         setErrors({ submit: errorMessage });
         showError("Update Failed", errorMessage);
       }
-    } catch (error) {
+    } catch {
       const errorMessage = "Failed to update goal. Please try again.";
       setErrors({ submit: errorMessage });
       showError("Network Error", errorMessage);
@@ -176,17 +176,16 @@ export default function GoalDetailsPage({
           "Goal Deleted Successfully!",
           `"${goal?.title}" has been permanently deleted.`
         );
-        // Small delay to show the toast before navigation
         setTimeout(() => {
           router.push("/goals");
         }, 1000);
       } else {
-        const error = await response.json();
-        const errorMessage = error.error || "Failed to delete goal";
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.error || "Failed to delete goal";
         setErrors({ submit: errorMessage });
         showError("Delete Failed", errorMessage);
       }
-    } catch (error) {
+    } catch {
       const errorMessage = "Failed to delete goal. Please try again.";
       setErrors({ submit: errorMessage });
       showError("Network Error", errorMessage);
@@ -223,9 +222,7 @@ export default function GoalDetailsPage({
           onDelete={handleDeleteClick}
         />
 
-        {/* Goal Content */}
         {editing ? (
-          /* Edit Form */
           <EditGoalForm
             editData={editData}
             errors={errors}
@@ -247,7 +244,9 @@ export default function GoalDetailsPage({
           message={
             <div>
               <p>Are you sure you want to delete this goal?</p>
-              <p className="mt-2 font-medium text-gray-900">"{goal?.title}"</p>
+              <p className="mt-2 font-medium text-gray-900">
+                &quot;{goal?.title}&quot;
+              </p>
               <p className="mt-2 text-red-600">This action cannot be undone.</p>
             </div>
           }

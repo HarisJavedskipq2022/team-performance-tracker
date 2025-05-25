@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { GoalStatus, Priority } from "@prisma/client";
 
+interface GoalUpdateData {
+  title?: string;
+  description?: string;
+  status?: GoalStatus;
+  priority?: Priority;
+  dueDate?: Date | null;
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -35,7 +43,6 @@ export async function GET(
   }
 }
 
-// PUT /api/goals/[id] - Update goal
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -45,7 +52,7 @@ export async function PUT(
     const body = await request.json();
     const { title, description, status, priority, dueDate } = body;
 
-    const updateData: any = {};
+    const updateData: GoalUpdateData = {};
     if (title !== undefined) updateData.title = title;
     if (description !== undefined) updateData.description = description;
     if (status !== undefined) updateData.status = status as GoalStatus;
@@ -77,7 +84,6 @@ export async function PUT(
   }
 }
 
-// DELETE /api/goals/[id] - Delete goal
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

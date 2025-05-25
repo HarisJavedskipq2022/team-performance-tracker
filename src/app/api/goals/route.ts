@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { GoalStatus, Priority } from "@prisma/client";
 
+interface GoalWhereInput {
+  status?: GoalStatus;
+  priority?: Priority;
+  userId?: string;
+  OR?: Array<{
+    title?: { contains: string; mode: "insensitive" };
+    description?: { contains: string; mode: "insensitive" };
+  }>;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -10,7 +20,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId");
     const search = searchParams.get("search");
 
-    const where: any = {};
+    const where: GoalWhereInput = {};
 
     if (status) where.status = status;
     if (priority) where.priority = priority;

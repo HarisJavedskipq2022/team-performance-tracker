@@ -13,7 +13,8 @@ export default function GoalNotFound() {
             Goal not found
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            The goal you're looking for doesn't exist or has been deleted.
+            The goal you&apos;re looking for doesn&apos;t exist or has been
+            deleted.
           </p>
           <div className="mt-6">
             <Link

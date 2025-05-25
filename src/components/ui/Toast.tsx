@@ -1,5 +1,5 @@
 import { AlertCircle, CheckCircle, Info, X, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export type ToastType = "success" | "error" | "warning" | "info";
 
@@ -25,6 +25,13 @@ export default function Toast({ toast, onRemove }: ToastProps) {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleRemove = useCallback(() => {
+    setIsLeaving(true);
+    setTimeout(() => {
+      onRemove(toast.id);
+    }, 300);
+  }, [onRemove, toast.id]);
+
   useEffect(() => {
     if (toast.duration && toast.duration > 0) {
       const timer = setTimeout(() => {
@@ -32,14 +39,7 @@ export default function Toast({ toast, onRemove }: ToastProps) {
       }, toast.duration);
       return () => clearTimeout(timer);
     }
-  }, [toast.duration]);
-
-  const handleRemove = () => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      onRemove(toast.id);
-    }, 300);
-  };
+  }, [toast.duration, handleRemove]);
 
   const getToastStyles = () => {
     const baseStyles =

@@ -1,16 +1,16 @@
 "use client";
 
 import Navigation from "@/components/Navigation";
+import EmptyGoalsState from "@/components/goals/EmptyGoalsState";
 import GoalCard from "@/components/goals/GoalCard";
 import GoalFilters from "@/components/goals/GoalFilters";
 import GoalStats from "@/components/goals/GoalStats";
-import EmptyGoalsState from "@/components/goals/EmptyGoalsState";
 import { useToast } from "@/contexts/ToastContext";
 import { GoalWithUser, isOverdue } from "@/lib/types";
 import { GoalStatus } from "@prisma/client";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function GoalsPage() {
   const { showSuccess, showError } = useToast();
@@ -23,11 +23,7 @@ export default function GoalsPage() {
   });
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    fetchGoals();
-  }, [filters]);
-
-  const fetchGoals = async () => {
+  const fetchGoals = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (filters.status) params.append("status", filters.status);
@@ -44,7 +40,11 @@ export default function GoalsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchGoals();
+  }, [fetchGoals]);
 
   const handleStatusChange = async (goalId: string, newStatus: GoalStatus) => {
     try {
@@ -55,7 +55,7 @@ export default function GoalsPage() {
       });
 
       if (response.ok) {
-        const updatedGoal = await response.json();
+        await response.json();
         fetchGoals();
 
         const statusMessages = {

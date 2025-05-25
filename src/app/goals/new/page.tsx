@@ -1,11 +1,11 @@
 "use client";
 
 import Navigation from "@/components/Navigation";
-import GoalBasicInfo from "@/components/goals/GoalBasicInfo";
 import GoalAssignment from "@/components/goals/GoalAssignment";
+import GoalBasicInfo from "@/components/goals/GoalBasicInfo";
+import GoalPreview from "@/components/goals/GoalPreview";
 import GoalPriority from "@/components/goals/GoalPriority";
 import GoalTimeline from "@/components/goals/GoalTimeline";
-import GoalPreview from "@/components/goals/GoalPreview";
 import GoalTipsCard from "@/components/goals/GoalTipsCard";
 import { useToast } from "@/contexts/ToastContext";
 import { Priority } from "@prisma/client";
@@ -95,19 +95,19 @@ export default function NewGoalPage() {
       });
 
       if (response.ok) {
-        const createdGoal = await response.json();
+        await response.json();
         showSuccess(
           "Goal Created Successfully!",
           `"${formData.title}" has been assigned to the team member.`
         );
         router.push("/goals");
       } else {
-        const error = await response.json();
-        const errorMessage = error.error || "Failed to create goal";
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.error || "Failed to create goal";
         setErrors({ submit: errorMessage });
         showError("Failed to Create Goal", errorMessage);
       }
-    } catch (error) {
+    } catch {
       const errorMessage = "Failed to create goal. Please try again.";
       setErrors({ submit: errorMessage });
       showError("Network Error", errorMessage);
@@ -121,16 +121,6 @@ export default function NewGoalPage() {
     if (errors[field]) {
       setErrors({ ...errors, [field]: "" });
     }
-  };
-
-  const getPriorityColor = (priority: Priority) => {
-    const colors = {
-      LOW: "bg-gray-50 border-gray-200 text-gray-700",
-      MEDIUM: "bg-yellow-50 border-yellow-200 text-yellow-800",
-      HIGH: "bg-orange-50 border-orange-200 text-orange-800",
-      CRITICAL: "bg-red-50 border-red-200 text-red-800",
-    };
-    return colors[priority] || colors.MEDIUM;
   };
 
   const selectedUser = users.find((user) => user.id === formData.userId);
