@@ -96,7 +96,7 @@ This document outlines the key product decisions, architectural choices, and tra
 ## 👥 Team Leadership Strategy (2 Sprints)
 
 ### Sprint 1: Foundation & Core Goals (Week 1-2)
-**Team Structure**: 3-4 developers + 1 designer + 1 PM
+**Team Structure**: 3 developers + 1 designer + 1 PM
 
 **Sprint Goals**:
 - Set up development environment and CI/CD
@@ -144,43 +144,8 @@ This document outlines the key product decisions, architectural choices, and tra
 - **Product**: 80% user adoption within first month, positive feedback scores
 - **Team**: Sprint velocity improvement, low technical debt accumulation
 
-## 🚀 Future Roadmap
-
-### Phase 2 (Months 2-3)
-- Advanced analytics and reporting
-- Mobile-responsive design improvements
-- Integration with existing HR systems
-- Advanced notification system
-
-### Phase 3 (Months 4-6)
-- AI-powered goal recommendations
-- Advanced skill gap analysis
-- Team collaboration features
-- Performance prediction models
-
-## 📊 Technical Specifications
-
-### Performance Requirements
-- **Page Load Time**: <2 seconds
-- **API Response Time**: <500ms for CRUD operations
-- **Concurrent Users**: Support 100+ simultaneous users
-- **Data Volume**: Handle 10,000+ goals, 1,000+ users
-
-### Security Considerations
-- **Authentication**: JWT-based with refresh tokens
-- **Authorization**: Role-based access control (RBAC)
-- **Data Protection**: Encryption at rest and in transit
-- **Audit Logging**: Track all data modifications
-
-### Scalability Plan
-- **Database**: Read replicas for reporting queries
-- **Caching**: Redis for session management and frequent queries
-- **CDN**: Static asset delivery optimization
-- **Monitoring**: Application performance monitoring (APM)
-
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: January 2024  
-**Author**: Development Team  
-**Stakeholders**: HR Leadership, Engineering Management 
+**Last Updated**: May 2025  
+**Author**: Hairs Javed
