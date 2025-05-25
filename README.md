@@ -51,13 +51,16 @@ npm install
 
 # Using bun
 bun install
+
+#using pnpm
+pnpm install
 ```
 
 ### 3. Set Up Environment Variables
 Create a `.env` file in the root directory:
 ```env
 # Database
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/team_performance?schema=public"
+DATABASE_URL="postgresql://password:password@localhost:5432/team_performance?schema=public"
 
 # Next.js
 NEXTAUTH_URL="http://localhost:3000"
@@ -77,11 +80,29 @@ docker-compose up -d
 # Generate Prisma client
 npx prisma generate
 
+# using pnpm
+pnpx prisma generate
+
+# using bun
+bunx prisma generate
+
 # Push schema to database
 npx prisma db push
 
+# using pnpm
+pnpx prisma db push
+
+# using bun
+bunx prisma db push
+
 # Seed with sample data
 npx tsx prisma/seed.ts
+
+# using pnpm
+pnpx tsx prisma/seed.ts
+
+# using bun
+bunx tsx prisma/seed.ts
 ```
 
 ### 6. Start the Development Server
@@ -91,6 +112,9 @@ npm run dev
 
 # Using bun
 bun run dev
+
+# using pnpm
+pnpm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
