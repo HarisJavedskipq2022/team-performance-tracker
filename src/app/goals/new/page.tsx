@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
-import { ArrowLeft, Save, User, Calendar, Flag } from "lucide-react";
-import Link from "next/link";
-import { Priority } from "@prisma/client";
 import { priorityLabels } from "@/lib/types";
+import { Priority } from "@prisma/client";
+import { ArrowLeft, Calendar, Flag, Save, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type UserOption = {
   id: string;

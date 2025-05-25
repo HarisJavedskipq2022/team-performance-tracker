@@ -1,27 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import {
-  Target,
+  GoalWithUser,
+  formatDate,
+  goalStatusColors,
+  goalStatusLabels,
+  isOverdue,
+  priorityColors,
+  priorityLabels,
+} from "@/lib/types";
+import { GoalStatus } from "@prisma/client";
+import {
+  AlertCircle,
+  Calendar,
+  Filter,
   Plus,
   Search,
-  Filter,
-  Calendar,
+  Target,
   User,
-  AlertCircle,
 } from "lucide-react";
-import { GoalStatus, Priority } from "@prisma/client";
-import {
-  GoalWithUser,
-  goalStatusLabels,
-  priorityLabels,
-  goalStatusColors,
-  priorityColors,
-  formatDate,
-  isOverdue,
-} from "@/lib/types";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function GoalsPage() {
   const [goals, setGoals] = useState<GoalWithUser[]>([]);
@@ -65,7 +65,7 @@ export default function GoalsPage() {
       });
 
       if (response.ok) {
-        fetchGoals(); // Refresh the list
+        fetchGoals();
       }
     } catch (error) {
       console.error("Error updating goal status:", error);
