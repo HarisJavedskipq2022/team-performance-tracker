@@ -1,6 +1,6 @@
 # Team Performance Tracker MVP
 
-A modern web application for HR managers to track team goals, skills, feedback, and performance reviews. Built with Next.js, TypeScript, and PostgreSQL. 
+A modern web application for HR managers to track team goals, skills, feedback, and performance reviews. Built with Next.js, TypeScript, and PostgreSQL.. 
 
 ## 🎯 Features
 
